@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ovos-media-provider-tunein"
+dynamic = ["version"]
+description = "OVOS MediaProvider plugin for TuneIn (replaces ovos-skill-tunein)"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+authors = [{ name = "jarbasAI", email = "jarbasai@mailfence.com" }]
+requires-python = ">=3.10"
+keywords = ["ovos", "ocp", "media", "tunein", "radio", "mediaprovider", "plugin"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "mediavocab>=1.0.0",
+    "ovos-plugin-manager>=2.1",
+    "tunein>=0.1.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest", "pytest-cov"]
+
+[project.entry-points."opm.media.provider"]
+tunein = "ovos_media_provider_tunein:TuneInMediaProvider"
+
+[project.urls]
+Homepage = "https://github.com/OpenVoiceOS/ovos-media-provider-tunein"
+
+[tool.setuptools.dynamic]
+version = { attr = "ovos_media_provider_tunein.version.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["ovos_media_provider_tunein*"]

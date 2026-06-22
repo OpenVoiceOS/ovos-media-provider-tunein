@@ -1,0 +1,14 @@
+name: Run Build Tests
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build_tests:
+    uses: OpenVoiceOS/gh-automations/.github/workflows/build-tests.yml@dev
+    secrets: inherit
+    with:
+      pre_install_pip: "git+https://github.com/TigreGotico/mediavocab@feat/audit-2026-05-core git+https://github.com/OpenVoiceOS/ovos-plugin-manager@feat/media-provider-plugin-type git+https://github.com/TigreGotico/tunein@fix/genre-format-crash"
+      install_extras: "test"
+      test_path: "test/"
