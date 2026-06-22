@@ -19,7 +19,7 @@ classifiers = [
 dependencies = [
     "mediavocab>=1.0.0",
     "ovos-plugin-manager>=2.1",
-    "tunein>=0.1.0",
+    "tunein>=0.1.0a1",
 ]
 
 [project.optional-dependencies]
