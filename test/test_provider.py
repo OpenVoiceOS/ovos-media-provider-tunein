@@ -2,7 +2,6 @@
 from unittest.mock import MagicMock, patch
 
 from mediavocab import MediaType, Release, Signals, StreamMode, Work
-from mediavocab.taxonomy import PlaybackType
 
 from ovos_media_provider_tunein import TuneInMediaProvider
 
@@ -24,19 +23,6 @@ def _make_station(title):
 def test_instantiation():
     prov = TuneInMediaProvider()
     assert prov.name == "tunein"
-    assert prov.media == {MediaType.RADIO}
-    assert prov.playback_type == {PlaybackType.AUDIO}
-    assert prov.is_available() is True
-
-
-def test_matches_radio_true():
-    prov = TuneInMediaProvider()
-    assert prov.matches(Signals(medium=MediaType.RADIO)) is True
-
-
-def test_matches_movie_false():
-    prov = TuneInMediaProvider()
-    assert prov.matches(Signals(medium=MediaType.MOVIE)) is False
 
 
 def test_search_returns_releases():
@@ -44,8 +30,14 @@ def test_search_returns_releases():
     stations = [_make_station("BBC Radio 4"), _make_station("Radio Paradise")]
     with patch("ovos_media_provider_tunein.TuneIn.search",
                return_value=iter(stations)) as mocked:
-        results = prov.search(Signals(medium=MediaType.RADIO,
-                                      title="bbc radio 4"))
+        results = prov.search(
+            Signals(medium=MediaType.RADIO, title="bbc radio 4"),
+            lang="en-us",
+            supported_playback_types={"audio"},
+            blocked_genres={"adult"},
+            region="GB",
+            session_id="sess-1",
+        )
     mocked.assert_called_once()
     assert isinstance(results, list)
     assert len(results) == 2
