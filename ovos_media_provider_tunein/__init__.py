@@ -15,8 +15,7 @@ from typing import ClassVar, List, Optional, Set
 
 from ovos_utils.log import LOG
 
-from mediavocab import MediaType, Release, Signals
-from mediavocab.taxonomy import PlaybackType
+from mediavocab import Release, Signals
 
 from ovos_plugin_manager.templates.media_provider import MediaProvider
 
@@ -26,15 +25,9 @@ from ovos_media_provider_tunein.version import __version__  # noqa: F401
 
 
 class TuneInMediaProvider(MediaProvider):
-    """Search TuneIn and return playable radio :class:`Release` objects.
-
-    Routing is fixed to radio audio: the OCP pipeline gates this provider out
-    of non-radio queries before paying for a network search.
-    """
+    """Search TuneIn and return playable radio :class:`Release` objects."""
 
     name: ClassVar[str] = "tunein"
-    media: ClassVar[Set[MediaType]] = {MediaType.RADIO}
-    playback_type: ClassVar[Set[PlaybackType]] = {PlaybackType.AUDIO}
 
     def __init__(self, config: Optional[dict] = None):
         super().__init__(config)
@@ -43,13 +36,11 @@ class TuneInMediaProvider(MediaProvider):
         # cheap; overridable via plugin config.
         self.enrich: bool = bool(self.config.get("enrich", False))
 
-    def is_available(self) -> bool:
-        """``tunein`` is a hard dependency and TuneIn's search endpoint needs
-        no API key, so the provider is available whenever its imports
-        resolved."""
-        return True
-
-    def search(self, signals: Signals, lang: str = "en-us") -> List[Release]:
+    def search(self, signals: Signals, lang: str = "en-us", *,
+               supported_playback_types: Optional[Set[str]] = None,
+               blocked_genres: Optional[Set[str]] = None,
+               region: Optional[str] = None,
+               session_id: Optional[str] = None) -> List[Release]:
         """Search TuneIn for ``signals.title`` and return candidate radio
         :class:`Release` objects.
 
