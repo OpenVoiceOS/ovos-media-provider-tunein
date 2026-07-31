@@ -25,8 +25,7 @@ pip install ovos-media-provider-tunein
 ```
 
 The plugin is registered under the `opm.media.provider` entry-point group as
-`tunein` and is loaded in-process by the OCP pipeline; there is nothing to
-configure.
+`tunein`. The OCP pipeline loads it in-process. There is nothing to configure.
 
 ### Configuration
 
@@ -38,11 +37,19 @@ configure.
 
 `TuneInMediaProvider.search(signals, lang)` builds a query from `signals.title`,
 calls `tunein.TuneIn.search(...)`, and returns the `mediavocab.Release` produced
-by each station's `to_release()`. Per mediavocab axiom 8 (station identity), a
-TuneIn channel is a `Work` with `MediaType.RADIO` and the playable stream URL is
-a `Release` with `StreamMode.CONTINUOUS` (live linear broadcast). A station may
-expose several stream URLs (bitrates/protocols), each yielding its own
-`Release`; the OCP pipeline filters and ranks across providers.
+by each station's `to_release()`.
+
+Per mediavocab axiom 8 (station identity), a TuneIn channel is a `Work` with
+`MediaType.RADIO`. The playable stream URL is a `Release` with
+`StreamMode.CONTINUOUS` (live linear broadcast). A station may expose several
+stream URLs (bitrates/protocols), each yielding its own `Release`. The OCP
+pipeline filters and ranks across providers.
+
+## Related projects
+
+- [OpenVoiceOS/ovos-plugin-manager](https://github.com/OpenVoiceOS/ovos-plugin-manager): loads this plugin through the `opm.media.provider` entry-point group.
+- [TigreGotico/tunein](https://github.com/TigreGotico/tunein): the TuneIn client this plugin wraps.
+- [TigreGotico/mediavocab](https://github.com/TigreGotico/mediavocab): the `Work`/`Release` vocabulary this plugin returns.
 
 ## License
 
